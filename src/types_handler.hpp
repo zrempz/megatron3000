@@ -1,6 +1,6 @@
 #pragma once
 
-enum DATATYPE { FLOAT, INT, STRING, INVALID };
+enum DATATYPE { FLOAT, INT, STRING };
 
 void process_type(char &c, bool &has_sign, bool &has_digits, bool &has_dot,
                   bool &is_valid);
