@@ -57,6 +57,8 @@ compile_commands.json
 # Build Path
 build/
 
+# Cache
+.cache/
 
 # DB Path
 db/
