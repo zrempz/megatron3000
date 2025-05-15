@@ -9,6 +9,13 @@ RELEASE_FLAGS := -O2 -DNDEBUG
 
 SRCS := $(wildcard $(SRC_DIR)/*.cpp)
 OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+ARGS := $(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
+$(ARGS):
+	@:
+
+.PHONY: $(ARGS)
+
+.PHONY: all debug release run clean bear help
 
 all: release
 
@@ -19,7 +26,7 @@ release: CXXFLAGS += $(RELEASE_FLAGS)
 release: $(BUILD_DIR)/$(TARGET)
 
 run: release
-	@./$(BUILD_DIR)/$(TARGET)
+	@./$(BUILD_DIR)/$(TARGET) $(ARGS)
 
 $(BUILD_DIR)/$(TARGET): $(OBJS)
 	@mkdir -p $(@D)
@@ -30,7 +37,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR) ./*.txt
 	
 bear: clean
 	bear -- make all
