@@ -1,7 +1,5 @@
-#include "tsv_importer.hpp"
+#include "disk.hpp"
 
-int main(int argc, const char *argv[]) {
-  if (argc == 2) {
-    import_from_tsv(argv[1]);
-  }
+int main(){
+  Disk disk(0,2,8,32,32);
 }

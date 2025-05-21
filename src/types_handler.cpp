@@ -1,33 +1,36 @@
 #include "types_handler.hpp"
 
-DATATYPE determine_type(bool has_digits, bool has_dot, bool is_valid) {
-  if (!is_valid || !has_digits)
-    return STRING;
-  if (has_dot)
-    return FLOAT;
-  return INT;
-}
+void process_type(char c, unsigned char &flags) {
+  if (!(flags & IS_VALID))
+    return; // Early exit if already invalid
 
-void process_type(char &c, bool &has_sign, bool &has_digits, bool &has_dot,
-                  bool &valid) {
-  if (!valid)
-    return;
   if (is_sign(c)) {
-    if (has_sign || has_digits || has_dot)
-      valid = false;
-    has_sign = true;
-  } else if (c == '.') {
-    if (has_dot || !has_digits) {
-      valid = false;
+    // Sign allowed only at start before digits/dot
+    if ((flags & (HAS_SIGN | HAS_DIGITS | HAS_DOT)) != 0) {
+      flags &= ~IS_VALID; // Invalid position for sign character
+    } else {
+      flags |= HAS_SIGN;
     }
-    has_dot = true;
+  } else if (is_dot(c)) {
+    // Dot requires preceding digit and no existing dot
+    if ((flags & HAS_DOT) || !(flags & HAS_DIGITS)) {
+      flags &= ~IS_VALID; // Double dot or leading dot
+    } else {
+      flags |= HAS_DOT;
+    }
   } else if (is_digit(c)) {
-    has_digits = true;
+    flags |= HAS_DIGITS; // Found at least one numeric character
   } else {
-    valid = false;
+    flags &= ~IS_VALID; // Non-numeric, non-special character
   }
 }
 
-bool is_sign(const char c) { return c == '+' || c == '-'; }
-bool is_dot(const char c) { return c == '.'; }
-bool is_digit(const char c) { return c >= '0' && c <= '9'; }
+DataType determine_type(unsigned char flags) {
+  // Must be valid and have at least one digit to be numeric
+  if (!(flags & IS_VALID) || !(flags & HAS_DIGITS)) {
+    return STRING; // Fallback to string type
+  }
+
+  // Float requires valid decimal point, otherwise integer
+  return (flags & HAS_DOT) ? FLOAT : INT;
+}
