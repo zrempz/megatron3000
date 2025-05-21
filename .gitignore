@@ -62,3 +62,6 @@ build/
 
 # DB Path
 db/
+
+# Disks
+disks/
