@@ -9,7 +9,7 @@ constexpr std::string_view DISKS_DIR = "./disks/";
 
 // Schema configuration
 constexpr const char *SCHEMA_FILENAME = "schema.txt";
-constexpr char SCHEMA_DELIMITER = '#';
+constexpr char DB_DELIMITER = '#';
 
 // Type system - string_view for zero-copy comparisons
 constexpr std::string_view TYPE_FLOAT = "float";
