@@ -3,7 +3,7 @@
 #include <iostream>
 #include <limits>
 
-void menu() {
+void menu(const Disk &disk) {
   while (true) {
     std::cout << "Choose an option:\n";
     std::cout << "1) Import from CSV\n";
@@ -23,7 +23,7 @@ void menu() {
       std::cin.getline(filename, 256);
 
       // Call the CSV import function with the provided filename
-      if (import_from_csv(filename)) {
+      if (import_from_csv(filename, disk)) {
         std::cout << "Successfully imported data from '" << filename
                   << "'.\n\n";
       } else {
@@ -47,7 +47,7 @@ int main() {
   Disk disk(0, 2, 8, 32, 32);
 
   // Run the menu loop
-  menu();
+  menu(disk);
 
   return 0;
 }
